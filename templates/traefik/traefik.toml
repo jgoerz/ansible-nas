@@ -37,7 +37,7 @@ defaultEntryPoints = ["http", "https"]
   [entryPoints.https]
   address = ":443"
     [entryPoints.https.tls]
-    
+
   [entryPoints.traefik]
   address = ":8083"
 
@@ -164,6 +164,7 @@ storage = "acme.json"
 entryPoint = "https"
 acmeLogging = true
 onDemand = false # create certificate when container is created
+caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 
   # [acme.dnsChallenge]
   # provider = "cloudflare"
@@ -171,7 +172,7 @@ onDemand = false # create certificate when container is created
 
   # [acme.httpChallenge]
   # entryPoint = "http"
-  
+
   [acme.tlsChallenge]
 
   [[acme.domains]]

@@ -21,6 +21,14 @@
     src: traefik/traefik.toml
     dest: "{{ traefik_data_directory }}/traefik.toml"
 
+- name: Set Traefik to use Let's Encrypt production environment
+  ini_file:
+    path: "{{ traefik_data_directory }}/traefik.toml"
+    section: acme
+    option: caServer
+    state: absent
+  when: traefik_production
+
 - name: Traefik Docker Container
   docker_container:
     name: traefik

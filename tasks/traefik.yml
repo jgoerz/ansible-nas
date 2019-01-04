@@ -18,16 +18,9 @@
 
 - name: Template Traefik config.toml
   template:
-    src: traefik/traefik.toml
+    src: traefik/traefik.toml.j2
     dest: "{{ traefik_data_directory }}/traefik.toml"
-
-- name: Set Traefik to use Let's Encrypt production environment
-  ini_file:
-    path: "{{ traefik_data_directory }}/traefik.toml"
-    section: acme
-    option: caServer
-    state: absent
-  when: traefik_production
+  register: traefik_config
 
 - name: Traefik Docker Container
   docker_container:
@@ -43,3 +36,9 @@
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     restart_policy: unless-stopped
     memory: 1g
+
+- name: restart traefik if config changed
+  docker_container:
+     name: traefik
+     restart : yes
+  when: traefik_config.changed

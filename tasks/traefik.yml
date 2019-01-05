@@ -42,3 +42,5 @@
      name: traefik
      restart : yes
   when: traefik_config.changed
+  tags:
+    - skip_ansible_lint

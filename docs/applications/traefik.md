@@ -16,13 +16,25 @@ certificate was signed by a root certificate that I trust, therefore I trust the
 Let's Encrypt, the service that Ansible-NAS uses to create certificates for the docker containers,
 has two "root" certificates we can use.
 
-# First, understanding rate limits
+# How it works
+
+A detailed explanation can be found here: [How it works](https://letsencrypt.org/how-it-works/). A short summary is:
+
+* Traefik on Ansible-NAS (agent) says to Let's Encrypt (CA) "I would like a cert. How can I prove I own this domain?"
+* CA replies with some challenges
+* Agent provides a way to meet those challenges:
+  * Usually hosting a file on a HTTP server (port 80)
+    * This means that the CA needs to be able to reach the agent's random HTTP server through your firewall. Hence the need to port forward 80 *and* 443 from your firewall to Ansible-NAS.
+  * Once challenges are met, random HTTP server is deleted, and certificate can be issued.
+  * Agent downloads the certificate from the CA, and places the files in the correct locations within the container.
+
+# Understanding rate limits
 
 In order to allow fair usage of their their service, Let's Encrypt use "rate limits".
 The [Rate Limits](https://letsencrypt.org/docs/rate-limits/) page on the Let's Encrypt website
 gives a detailed explanation.
 
-For our purposes, we do not want to hit the some of these limits whilst we are developing or testing our Ansible-NAS configuration.
+For Ansible-NAS purposes, we do not want to hit the some of these limits whilst we are developing or testing our configuration.
 
 For example, if you are doing many test runs on a virtual machine, reseting to a snapshot each time, you will very quickly run afoul of the "Duplicate Certificate" rate limit of 5 per week, because you will effectively be asking for the exact same certificate for each test run you do.
 

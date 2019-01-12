@@ -33,12 +33,13 @@ couchpotato_enabled: false
 radarr_enabled: false
 
 # Music
-airsonic_enabled: true
+airsonic_enabled: false
 
 # News
 miniflux_enabled: false
 
 # System Management
+heimdall_enabled: true
 portainer_enabled: true
 glances_enabled: true
 stats_enabled: false
@@ -47,7 +48,7 @@ netdata_enabled: false
 watchtower_enabled: false
 
 # Backup & Restore
-duplicati_enabled: true
+duplicati_enabled: false
 nextcloud_enabled: false
 gitea_enabled: false
 
@@ -199,6 +200,8 @@ ansible_nas_extra_packages:
   - bonnie++
   - unzip
   - lm-sensors
+
+ansible_python_interpreter: /usr/bin/python3
 
 ###
 ### Samba
